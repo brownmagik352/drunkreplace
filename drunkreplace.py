@@ -12,10 +12,30 @@ UpRedhigh = 180
 
 ###
 
+if len(sys.argv) != 2:
+	print "Usage: drunkreplace filename"
+	sys.exit()
 
 # Get image
-orig_img = cv2.imread('inputcup2.png')
+orig_img = cv2.imread(sys.argv[1])
 height, width, depth = orig_img.shape
+
+# Downsample image
+
+# if height > 1000:
+# 	rat = 1000/height
+# 	height = rat * height
+# 	width = rat * width
+# elif width > 1000:
+# 	rat = 1000/width
+# 	height = rat * height
+# 	width = rat * width
+
+print width, height
+orig_img = cv2.resize(orig_img, (width , height))
+
+height, width, depth = orig_img.shape
+
 
 # Preprocess, convert to HSV
 img = cv2.cvtColor(orig_img, cv2.COLOR_BGR2HSV)
