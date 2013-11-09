@@ -18,6 +18,7 @@ UpRedlow = 175
 UpRedhigh = 180
 ExclusionRatio = 75
 Offset = 0
+MomentLimit = 4000
 
 ###
 
@@ -43,40 +44,42 @@ def max_min_box(box):
 
 def replace_contour(largest_contour, img):
 	## Find the box excompassing the largest red blob
-	pheight, pwidth, pdepth = img.shape
+	moment = cv2.moments(largest_contour)
+	if moment["m00"] > MomentLimit:
+		pheight, pwidth, pdepth = img.shape
 
-	rect = cv2.minAreaRect(largest_contour)
-	box = cv2.cv.BoxPoints(rect)
-	box = np.int0(box)
-	if (not_min_size(cv2.contourArea(largest_contour))): # minimum threshold
+		rect = cv2.minAreaRect(largest_contour)
+		box = cv2.cv.BoxPoints(rect)
+		box = np.int0(box)
+		if (not_min_size(cv2.contourArea(largest_contour))): # minimum threshold
+			return img
+		# print box
+		[minx,maxx,miny,maxy] = max_min_box(box)
+
+		box_width = maxx-minx
+		maxy = int((1.2*box_width)+miny)
+		if maxy > pheight:
+			maxy = pheight-1
+
+		box_height = maxy-miny
+
+		replace = cv2.imread('coke.png')
+		rheight, rwidth, rdepth = replace.shape
+		replace_resize = cv2.resize(replace, (int(box_width) , int(box_height)))
+		theight, twidth, tdepth = replace_resize.shape
+		replace_transform = cv2.cvtColor(replace_resize, cv2.COLOR_BGR2HSV)
+
+		## Replace pixels in blob
+		# s,w,z = img.shape
+		# [xmin,xmax,ymin,ymax] = max_min_box(box)
+		for x in range (minx, maxx):
+		 	for y in range (miny, maxy):
+		 		# if y > 0 and y < s and x > 0 and x < w :
+		 			# print img.shape, y, x
+				px = img[y][x]
+		 		if (px[0] >= LowRedlow and px[1] >= 100 and px[2] >= 0 and px[0] <= LowRedhigh-Offset and px[1] <= 255 and px[2] <= 255) or (px[0] >= UpRedlow+Offset and px[1] >= 100 and px[2] >= 0 and px[0] <= UpRedhigh and px[1] <= 255 and px[2] <= 255): 
+					img[y][x] = replace_transform[(theight/2)+((y-miny)-(theight/2))][(twidth/2)+((x-minx)-(twidth/2))]
 		return img
-	# print box
-	[minx,maxx,miny,maxy] = max_min_box(box)
-
-	box_width = maxx-minx
-	maxy = int((1.2*box_width)+miny)
-	if maxy > pheight:
-		maxy = pheight-1
-
-	box_height = maxy-miny
-
-	replace = cv2.imread('coke.png')
-	rheight, rwidth, rdepth = replace.shape
-	replace_resize = cv2.resize(replace, (int(box_width) , int(box_height)))
-	theight, twidth, tdepth = replace_resize.shape
-	replace_transform = cv2.cvtColor(replace_resize, cv2.COLOR_BGR2HSV)
-
-	## Replace pixels in blob
-	# s,w,z = img.shape
-	# [xmin,xmax,ymin,ymax] = max_min_box(box)
-	for x in range (minx, maxx):
-	 	for y in range (miny, maxy):
-	 		# if y > 0 and y < s and x > 0 and x < w :
-	 			# print img.shape, y, x
-			px = img[y][x]
-	 		if (px[0] >= LowRedlow and px[1] >= 100 and px[2] >= 0 and px[0] <= LowRedhigh-Offset and px[1] <= 255 and px[2] <= 255) or (px[0] >= UpRedlow+Offset and px[1] >= 100 and px[2] >= 0 and px[0] <= UpRedhigh and px[1] <= 255 and px[2] <= 255): 
-				img[y][x] = replace_transform[(theight/2)+((y-miny)-(theight/2))][(twidth/2)+((x-minx)-(twidth/2))]
-	return img
 
 def draw_box(largest_contour, img):
 	## Find the box excompassing the largest red blob
