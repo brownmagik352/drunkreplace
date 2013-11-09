@@ -16,7 +16,7 @@ LowRedlow = 0
 LowRedhigh = 5
 UpRedlow = 175
 UpRedhigh = 180
-ExclusionRatio = 75
+ExclusionRatio = 0
 Offset = 0
 
 ###
@@ -51,8 +51,8 @@ def replace_contour(largest_contour, img):
             rect = cv2.minAreaRect(largest_contour)
             box = cv2.cv.BoxPoints(rect)
             box = np.int0(box)
-            if (not_min_size(cv2.contourArea(largest_contour))): # minimum threshold
-                    return img
+            # if (not_min_size(cv2.contourArea(largest_contour))): # minimum threshold
+            #         return img
             # print box
             [minx,maxx,miny,maxy] = max_min_box(box)
 
