@@ -58,7 +58,7 @@ def replace_contour(largest_contour, img):
 
 	box_height = maxy-miny
 
-	replace = cv2.imread('coke1.png')
+	replace = cv2.imread('coke.png')
 	rheight, rwidth, rdepth = replace.shape
 	replace_resize = cv2.resize(replace, (int(box_width) , int(box_height)))
 	theight, twidth, tdepth = replace_resize.shape
@@ -126,7 +126,6 @@ contours, hierarchy = cv2.findContours(red_binary, cv2.RETR_LIST, cv2.CHAIN_APPR
 # for x, c in enumerate(contours): #repetitive loop???
 # 	if not_min_size(cv2.contourArea(contours[x]), height, width):
 # 		del contours[x] #eliminate any irrelevant contours
-# print len(contours)
 
 ## Doesn't fit cup dimensions
 # for x, c in enumerate(contours): #repetitive loop???
@@ -147,19 +146,19 @@ if not contours:
 # Sort contours by area
 contoursSorted = sorted(contours, key = lambda (v): cv2.contourArea(v) , reverse = True)
 
-largest_contour = contoursSorted[0]
-largest_idx = 0
+# # Write contour lines
+# for x in xrange(0,len(contours)):
+# 	cv2.drawContours(orig_img, contoursSorted, x, [x*10,0,100],thickness = 5)
+# cv2.imwrite('contours.png',orig_img)
 
-for x in xrange(0,len(contours)):
-	cv2.drawContours(orig_img, contoursSorted, x, [x*10,0,100],thickness = 5)
-cv2.imwrite('contours.png',orig_img)
+# # Write freature boxes
+# a = img
+# for x in xrange(0,len(contours)):
+# 	a = draw_box(contoursSorted[x], a)
+# a = cv2.cvtColor(a, cv2.COLOR_HSV2BGR)
+# cv2.imwrite('boxes.png',a)
 
-a = img
-for x in xrange(0,len(contours)):
-	a = draw_box(contoursSorted[x], a)
-a = cv2.cvtColor(a, cv2.COLOR_HSV2BGR)
-cv2.imwrite('boxes.png',a)
-
+# Replace image in cups
 for x in xrange(0,len(contours)):
 	img = replace_contour(contoursSorted[x], img)
 out_img = cv2.cvtColor(img, cv2.COLOR_HSV2BGR)
