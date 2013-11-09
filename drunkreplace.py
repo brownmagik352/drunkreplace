@@ -76,7 +76,7 @@ def replace_contour(largest_contour, img):
                      for y in range (miny, maxy):
                              # if y > 0 and y < s and x > 0 and x < w :
                                      # print img.shape, y, x
-                            px = img[y][x]
+                            px = img[y-1][x-1]
                             if (px[0] >= LowRedlow and px[1] >= 100 and px[2] >= 0 and px[0] <= LowRedhigh-Offset and px[1] <= 255 and px[2] <= 255) or (px[0] >= UpRedlow+Offset and px[1] >= 100 and px[2] >= 0 and px[0] <= UpRedhigh and px[1] <= 255 and px[2] <= 255): 
                                     img[y][x] = replace_transform[(theight/2)+((y-miny)-(theight/2))][(twidth/2)+((x-minx)-(twidth/2))]
         return img
