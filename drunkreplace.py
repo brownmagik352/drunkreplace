@@ -82,6 +82,7 @@ rect = cv2.minAreaRect(largest_contour)
 box = cv2.cv.BoxPoints(rect)
 box = np.int0(box)
 box_width = box[3][0]-box[1][0]
+box[3][1]=(1.2*box_width)+box[1][1]
 box_height = box[3][1]-box[1][1]
 replace = cv2.imread('coke.png')
 rheight, rwidth, rdepth = replace.shape
