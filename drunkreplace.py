@@ -14,7 +14,7 @@ UpRedhigh = 180
 
 
 # Get image
-orig_img = cv2.imread('inputcup.png')
+orig_img = cv2.imread('inputcup1.png')
 height, width, depth = orig_img.shape
 
 # Preprocess, convert to HSV
@@ -63,13 +63,15 @@ rect = cv2.minAreaRect(largest_contour)
 box = cv2.cv.BoxPoints(rect)
 box = np.int0(box)
 print box
-coke = imread('coke.png')
-coke_resize = cv2.resize()
+replace = cv2.imread('coke.png')
+rheight, rwidth, rdepth = replace.shape
+replace_resize = cv2.resize(replace, ((width/rwidth),(height/rheight)))
+replace_transform = cv2.cvtColor(replace_resize, cv2.COLOR_BGR2HSV)
 # # Make everything in the blob white (WRONG)
 for x in range (int(box[1][0]), int(box[3][0])):
  	for y in range (int(box[1][1]), int(box[3][1])):
 		px = img[y][x]
  		if (px[0] >= 0 and px[1] >= 100 and px[2] >= 0 and px[0] <= 10 and px[1] <= 255 and px[2] <= 255) or (px[0] >= 170 and px[1] >= 100 and px[2] >= 0 and px[0] <= 180 and px[1] <= 255 and px[2] <= 255): 
-			img[y][x] = [0,0,255]
+			img[y][x] = replace_transform[y-int(box[1][1])][x-int(box[1][0])]
 out_img = cv2.cvtColor(img, cv2.COLOR_HSV2BGR)
 cv2.imwrite('out2.png',out_img)
