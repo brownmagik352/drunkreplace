@@ -54,22 +54,22 @@ for idx, contour in enumerate(contours):
 
 cv2.drawContours(orig_img, contours, largest_idx, [100,0,100])
 cv2.imwrite('largest_contour.png',orig_img)
-
+print height
+print width
 
 
 # # Find the box excompassing the largest red blob
-# rect = cv2.minAreaRect(largest_contour)
-# box = cv2.cv.BoxPoints(rect)
-# box = np.int0(box)
-
-
+rect = cv2.minAreaRect(largest_contour)
+box = cv2.cv.BoxPoints(rect)
+box = np.int0(box)
+print box
+coke = imread('coke.png')
+coke_resize = cv2.resize()
 # # Make everything in the blob white (WRONG)
-# for x in range (int(box[0][0]), int(box[3][0])):
-# 	for y in range (int(box[1][1]), int(box[0][1])):
-# 		px = img[x][y]
-# 		img[x][y] = [0,0,255]
-# 		if px[0] >= 0 and px[1] >= 100 and px[2] >= 0 and px[0] <= 5 and px[1] <= 255 and px[2] <= 255: 
-# 			img[x][y] = [0,0,255]
-
-# out_img = cv2.cvtColor(img, cv2.COLOR_HSV2BGR)
-# cv2.imwrite('out.png',out_img)
+for x in range (int(box[1][0]), int(box[3][0])):
+ 	for y in range (int(box[1][1]), int(box[3][1])):
+		px = img[y][x]
+ 		if (px[0] >= 0 and px[1] >= 100 and px[2] >= 0 and px[0] <= 10 and px[1] <= 255 and px[2] <= 255) or (px[0] >= 170 and px[1] >= 100 and px[2] >= 0 and px[0] <= 180 and px[1] <= 255 and px[2] <= 255): 
+			img[y][x] = [0,0,255]
+out_img = cv2.cvtColor(img, cv2.COLOR_HSV2BGR)
+cv2.imwrite('out2.png',out_img)
