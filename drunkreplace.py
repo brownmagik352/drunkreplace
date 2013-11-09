@@ -21,21 +21,9 @@ orig_img = cv2.imread(sys.argv[1])
 height, width, depth = orig_img.shape
 
 # Downsample image
-
-# if height > 1000:
-# 	rat = 1000/height
-# 	height = rat * height
-# 	width = rat * width
-# elif width > 1000:
-# 	rat = 1000/width
-# 	height = rat * height
-# 	width = rat * width
-
-print width, height
-orig_img = cv2.resize(orig_img, (width , height))
-
-height, width, depth = orig_img.shape
-
+while height > 1000 or width > 1000:
+	orig_img = cv2.resize(orig_img, (int(width*.8) , int(height*.8)))
+	height, width, depth = orig_img.shape
 
 # Preprocess, convert to HSV
 img = cv2.cvtColor(orig_img, cv2.COLOR_BGR2HSV)
