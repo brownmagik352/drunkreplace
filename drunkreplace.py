@@ -65,7 +65,7 @@ box = np.int0(box)
 print box
 replace = cv2.imread('coke.png')
 rheight, rwidth, rdepth = replace.shape
-replace_resize = cv2.resize(replace, ((width/rwidth),(height/rheight)))
+replace_resize = cv2.resize(replace, ((width/rwidth)*rwidth,(height/rheight)*rheight))
 replace_transform = cv2.cvtColor(replace_resize, cv2.COLOR_BGR2HSV)
 # # Make everything in the blob white (WRONG)
 for x in range (int(box[1][0]), int(box[3][0])):
