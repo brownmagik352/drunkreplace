@@ -14,7 +14,7 @@ UpRedhigh = 180
 
 
 # Get image
-orig_img = cv2.imread('inputcup1.png')
+orig_img = cv2.imread('inputcup2.png')
 height, width, depth = orig_img.shape
 
 # Preprocess, convert to HSV
@@ -54,24 +54,30 @@ for idx, contour in enumerate(contours):
 
 cv2.drawContours(orig_img, contours, largest_idx, [100,0,100])
 cv2.imwrite('largest_contour.png',orig_img)
-print height
-print width
+
 
 
 # # Find the box excompassing the largest red blob
 rect = cv2.minAreaRect(largest_contour)
 box = cv2.cv.BoxPoints(rect)
 box = np.int0(box)
-print box
+box_width = box[3][0]-box[1][0]
+box_height = box[3][1]-box[1][1]
+print box_width
+print box_height
 replace = cv2.imread('coke.png')
 rheight, rwidth, rdepth = replace.shape
-replace_resize = cv2.resize(replace, ((width/rwidth)*rwidth,(height/rheight)*rheight))
+#replace_resize = cv2.resize(replace, (int(math.ceil((box_width/rwidth)))*rwidth,int(math.ceil((box_height/rheight)))*rheight))
+replace_resize = cv2.resize(replace, (box_width , box_height))
+theight, twidth, tdepth = replace_resize.shape
+print twidth
+print theight
 replace_transform = cv2.cvtColor(replace_resize, cv2.COLOR_BGR2HSV)
 # # Make everything in the blob white (WRONG)
 for x in range (int(box[1][0]), int(box[3][0])):
  	for y in range (int(box[1][1]), int(box[3][1])):
 		px = img[y][x]
  		if (px[0] >= 0 and px[1] >= 100 and px[2] >= 0 and px[0] <= 10 and px[1] <= 255 and px[2] <= 255) or (px[0] >= 170 and px[1] >= 100 and px[2] >= 0 and px[0] <= 180 and px[1] <= 255 and px[2] <= 255): 
-			img[y][x] = replace_transform[y-int(box[1][1])][x-int(box[1][0])]
+			img[y][x] = replace_transform[(theight/2)+((y-box[1][1])-(theight/2))][(twidth/2)+((x-box[1][0])-(twidth/2))]
 out_img = cv2.cvtColor(img, cv2.COLOR_HSV2BGR)
 cv2.imwrite('out2.png',out_img)
