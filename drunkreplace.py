@@ -63,15 +63,10 @@ box = cv2.cv.BoxPoints(rect)
 box = np.int0(box)
 box_width = box[3][0]-box[1][0]
 box_height = box[3][1]-box[1][1]
-print box_width
-print box_height
 replace = cv2.imread('coke.png')
 rheight, rwidth, rdepth = replace.shape
-#replace_resize = cv2.resize(replace, (int(math.ceil((box_width/rwidth)))*rwidth,int(math.ceil((box_height/rheight)))*rheight))
 replace_resize = cv2.resize(replace, (box_width , box_height))
 theight, twidth, tdepth = replace_resize.shape
-print twidth
-print theight
 replace_transform = cv2.cvtColor(replace_resize, cv2.COLOR_BGR2HSV)
 # # Make everything in the blob white (WRONG)
 for x in range (int(box[1][0]), int(box[3][0])):
