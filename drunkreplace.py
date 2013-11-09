@@ -45,6 +45,18 @@ cv2.imwrite('red_binary.png',red_binary)
 # Find the sets of red blobs
 contours, hierarchy = cv2.findContours(red_binary, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
 
+def not_min_size(area):
+	ratio = 10
+	if area >= height*width / ratio:
+		return 0
+	else:
+		return 1
+		
+for x, c in enumerate(contours): #repetitive loop???
+	if not_min_size(cv2.contourArea(contours[x])):
+		del contours[x] #eliminate any irrelevant contours
+print len(contours)
+
 if not contours:
 	print "no contours"
 	sys.exit()
