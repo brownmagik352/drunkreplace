@@ -6,4 +6,5 @@ Requirements
 * numpy
 
 How to run 
-* $ python drunkreplace inputPicture
+
+`python drunkreplace inputPicture`
